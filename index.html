@@ -167,37 +167,6 @@
       line-height: 1.5;
     }
 
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .summary-box {
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: #fafafa;
-    }
-
-    .summary-label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .summary-value {
-      font-size: 22px;
-      font-weight: 800;
-    }
-
-    .summary-sub {
-      margin-top: 4px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
     .tabs {
       display: flex;
       flex-wrap: wrap;
@@ -387,7 +356,7 @@
       transform: translateX(-50%);
       width: min(760px, 100%);
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(10px);
       border-top: 1px solid var(--line);
@@ -419,9 +388,8 @@
 
     .fab {
       position: fixed;
-      left: 50%;
+      right: max(16px, calc((100vw - min(760px, 100vw)) / 2 + 16px));
       bottom: 74px;
-      transform: translateX(min(320px, 42vw));
       width: 58px;
       height: 58px;
       border: none;
@@ -491,12 +459,6 @@
       margin: 26px auto 0;
     }
 
-    .divider {
-      height: 1px;
-      background: var(--line);
-      margin: 14px 0;
-    }
-
     .small-note {
       font-size: 12px;
       color: var(--muted);
@@ -505,11 +467,10 @@
 
     @media (max-width: 560px) {
       h1 { font-size: 23px; }
-      .summary-grid { grid-template-columns: 1fr 1fr; }
-      .fab { transform: translateX(calc(50vw - 86px)); }
       .topbar { padding-inline: 12px; }
       .content { padding-inline: 12px; }
       .account-btn { max-width: 135px; }
+      .fab { right: 12px; }
     }
   </style>
 </head>
@@ -559,42 +520,7 @@
       </section>
 
       <section id="appPanel" class="hidden">
-        <section id="screen-home" class="screen active">
-          <div class="summary-grid">
-            <div class="summary-box">
-              <div class="summary-label">行きたい場所</div>
-              <div id="summaryWant" class="summary-value">0</div>
-              <div class="summary-sub">未訪問の件数</div>
-            </div>
-            <div class="summary-box">
-              <div class="summary-label">行った場所</div>
-              <div id="summaryDone" class="summary-value">0</div>
-              <div class="summary-sub">訪問済みの件数</div>
-            </div>
-            <div class="summary-box">
-              <div class="summary-label">共通の目標</div>
-              <div id="summaryShared" class="summary-value">0</div>
-              <div class="summary-sub">ライフプラン内</div>
-            </div>
-            <div class="summary-box">
-              <div class="summary-label">進行中の計画</div>
-              <div id="summaryActive" class="summary-value">0</div>
-              <div class="summary-sub">status = active</div>
-            </div>
-          </div>
-
-          <section class="panel">
-            <h2 class="section-title">最近追加した行きたい場所</h2>
-            <div id="homePlaces" class="list"></div>
-          </section>
-
-          <section class="panel">
-            <h2 class="section-title">優先して見たいライフプラン</h2>
-            <div id="homePlans" class="list"></div>
-          </section>
-        </section>
-
-        <section id="screen-places" class="screen">
+        <section id="screen-places" class="screen active">
           <section class="panel">
             <h2 id="placeFormTitle" class="section-title">行きたい場所を追加</h2>
             <div class="form-grid">
@@ -622,18 +548,29 @@
             <div id="placeStatus" class="status"></div>
           </section>
 
-          <div class="tabs">
-            <button class="tab-btn active" id="placeCategoryAllBtn" type="button">すべて</button>
-            <button class="tab-btn" id="placeCategoryFoodBtn" type="button">食</button>
-            <button class="tab-btn" id="placeCategoryTravelBtn" type="button">旅行</button>
-          </div>
+          <section class="panel">
+            <h2 class="section-title">一覧</h2>
 
-          <div class="tabs">
-            <button class="tab-btn active" id="placeVisitWantBtn" type="button">行きたい</button>
-            <button class="tab-btn" id="placeVisitDoneBtn" type="button">行った</button>
-          </div>
+            <div class="tabs">
+              <button class="tab-btn active" id="placeCategoryAllBtn" type="button">すべて</button>
+              <button class="tab-btn" id="placeCategoryFoodBtn" type="button">食</button>
+              <button class="tab-btn" id="placeCategoryTravelBtn" type="button">旅行</button>
+            </div>
 
-          <section id="placesList" class="list"></section>
+            <div class="tabs">
+              <button class="tab-btn active" id="placeVisitWantBtn" type="button">行きたい</button>
+              <button class="tab-btn" id="placeVisitDoneBtn" type="button">行った</button>
+            </div>
+
+<div class="pill-row" style="margin-bottom:12px;">
+  <span class="pill">食 行きたい: <span id="summaryFoodWant" style="margin-left:4px;">0</span></span>
+  <span class="pill">食 行った: <span id="summaryFoodDone" style="margin-left:4px;">0</span></span>
+  <span class="pill">旅行 行きたい: <span id="summaryTravelWant" style="margin-left:4px;">0</span></span>
+  <span class="pill">旅行 行った: <span id="summaryTravelDone" style="margin-left:4px;">0</span></span>
+</div>
+
+            <section id="placesList" class="list"></section>
+          </section>
         </section>
 
         <section id="screen-plans" class="screen">
@@ -704,68 +641,26 @@
             <div id="planStatus" class="status"></div>
           </section>
 
-          <div class="tabs">
-            <button class="tab-btn active" data-age-filter="all" type="button">すべて</button>
-            <button class="tab-btn" data-age-filter="20代" type="button">20代</button>
-            <button class="tab-btn" data-age-filter="30代" type="button">30代</button>
-            <button class="tab-btn" data-age-filter="40代" type="button">40代</button>
-            <button class="tab-btn" data-age-filter="50代" type="button">50代</button>
-            <button class="tab-btn" data-age-filter="60代+" type="button">60代+</button>
-          </div>
-
-          <div class="tabs">
-            <button class="tab-btn active" data-owner-filter="all" type="button">すべて</button>
-            <button class="tab-btn" data-owner-filter="shared" type="button">共通</button>
-            <button class="tab-btn" data-owner-filter="male" type="button">彼氏</button>
-            <button class="tab-btn" data-owner-filter="female" type="button">彼女</button>
-          </div>
-
-          <section id="plansList" class="list"></section>
-        </section>
-
-        <section id="screen-settings" class="screen">
           <section class="panel">
-            <h2 class="section-title">設定と確認</h2>
-            <p class="section-note">この画面は、状態確認・再読み込み・移動のために使います。</p>
+            <h2 class="section-title">一覧</h2>
 
-            <div class="summary-grid">
-              <div class="summary-box">
-                <div class="summary-label">items件数</div>
-                <div id="settingsItemsCount" class="summary-value">0</div>
-                <div class="summary-sub">行きたいリスト</div>
-              </div>
-              <div class="summary-box">
-                <div class="summary-label">life_plans件数</div>
-                <div id="settingsPlansCount" class="summary-value">0</div>
-                <div class="summary-sub">ライフプラン</div>
-              </div>
+            <div class="tabs">
+              <button class="tab-btn active" data-age-filter="all" type="button">すべて</button>
+              <button class="tab-btn" data-age-filter="20代" type="button">20代</button>
+              <button class="tab-btn" data-age-filter="30代" type="button">30代</button>
+              <button class="tab-btn" data-age-filter="40代" type="button">40代</button>
+              <button class="tab-btn" data-age-filter="50代" type="button">50代</button>
+              <button class="tab-btn" data-age-filter="60代+" type="button">60代+</button>
             </div>
 
-            <div class="form-grid">
-              <div class="form-group">
-                <label>ログイン中のメール</label>
-                <input id="settingsEmail" type="text" readonly />
-              </div>
-              <div class="form-group">
-                <label>共有リストID</label>
-                <input id="settingsListId" type="text" readonly />
-              </div>
-              <div class="form-group">
-                <label>保存先</label>
-                <input id="settingsStorage" type="text" readonly />
-              </div>
+            <div class="tabs">
+              <button class="tab-btn active" data-owner-filter="all" type="button">すべて</button>
+              <button class="tab-btn" data-owner-filter="shared" type="button">共通</button>
+              <button class="tab-btn" data-owner-filter="male" type="button">彼氏</button>
+              <button class="tab-btn" data-owner-filter="female" type="button">彼女</button>
             </div>
 
-            <div class="divider"></div>
-
-            <div class="inline-actions">
-              <button id="settingsReloadBtn" class="primary-btn" type="button">Supabaseから再読み込み</button>
-              <button id="settingsGoHomeBtn" class="secondary-btn" type="button">ホームを開く</button>
-              <button id="settingsGoPlacesBtn" class="secondary-btn" type="button">行きたいを開く</button>
-              <button id="settingsGoPlansBtn" class="secondary-btn" type="button">ライフプランを開く</button>
-            </div>
-
-            <div id="settingsStatus" class="status"></div>
+            <section id="plansList" class="list"></section>
           </section>
         </section>
       </section>
@@ -774,21 +669,13 @@
     <button id="fab" class="fab hidden" type="button" aria-label="追加する">＋</button>
 
     <nav id="bottomNav" class="bottom-nav hidden">
-      <button class="nav-btn active" data-screen="home" type="button">
-        <span class="nav-icon">⌂</span>
-        <span>ホーム</span>
-      </button>
-      <button class="nav-btn" data-screen="places" type="button">
+      <button class="nav-btn active" data-screen="places" type="button">
         <span class="nav-icon">📍</span>
         <span>行きたい</span>
       </button>
       <button class="nav-btn" data-screen="plans" type="button">
         <span class="nav-icon">🗂</span>
         <span>ライフプラン</span>
-      </button>
-      <button class="nav-btn" data-screen="settings" type="button">
-        <span class="nav-icon">⚙</span>
-        <span>設定</span>
       </button>
     </nav>
   </div>
@@ -825,7 +712,7 @@
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-    // ここを書き換えてください
+    // ここを自分の値に書き換えてください
     const SUPABASE_URL = "https://trsyyzgvwumwtgtxidhc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyc3l5emd2d3Vtd3RndHhpZGhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MjgyNjgsImV4cCI6MjA5MjIwNDI2OH0.5gz0Ao1TOAE5WGxE0BYWdX6ROuOCaFwQd1FrcKF9Vxo";
     const SHARED_LIST_ID = "7d0098c6-0f04-495a-80f4-83643ac94582";
@@ -834,7 +721,7 @@
 
     const state = {
       user: null,
-      currentScreen: "home",
+      currentScreen: "places",
       places: [],
       plans: [],
       placeVisitFilter: "want",
@@ -870,12 +757,10 @@
       fab: $("fab"),
       bottomNav: $("bottomNav"),
 
-      summaryWant: $("summaryWant"),
-      summaryDone: $("summaryDone"),
-      summaryShared: $("summaryShared"),
-      summaryActive: $("summaryActive"),
-      homePlaces: $("homePlaces"),
-      homePlans: $("homePlans"),
+summaryFoodWant: $("summaryFoodWant"),
+summaryFoodDone: $("summaryFoodDone"),
+summaryTravelWant: $("summaryTravelWant"),
+summaryTravelDone: $("summaryTravelDone"),
 
       placeFormTitle: $("placeFormTitle"),
       placeNameInput: $("placeNameInput"),
@@ -904,17 +789,6 @@
       planStatus: $("planStatus"),
       plansList: $("plansList"),
 
-      settingsItemsCount: $("settingsItemsCount"),
-      settingsPlansCount: $("settingsPlansCount"),
-      settingsEmail: $("settingsEmail"),
-      settingsListId: $("settingsListId"),
-      settingsStorage: $("settingsStorage"),
-      settingsReloadBtn: $("settingsReloadBtn"),
-      settingsGoHomeBtn: $("settingsGoHomeBtn"),
-      settingsGoPlacesBtn: $("settingsGoPlacesBtn"),
-      settingsGoPlansBtn: $("settingsGoPlansBtn"),
-      settingsStatus: $("settingsStatus"),
-
       fabModal: $("fabModal"),
       openPlaceFormBtn: $("openPlaceFormBtn"),
       openPlanFormBtn: $("openPlanFormBtn"),
@@ -927,10 +801,8 @@
     };
 
     const screenEls = {
-      home: $("screen-home"),
       places: $("screen-places"),
-      plans: $("screen-plans"),
-      settings: $("screen-settings")
+      plans: $("screen-plans")
     };
 
     function setStatus(el, message = "", type = "") {
@@ -1001,9 +873,7 @@
       els.accountDot.classList.add("logged-in");
       els.accountLabel.textContent = user.email || "ログイン中";
       els.accountEmail.textContent = `${user.email || ""}\nユーザーID: ${user.id || ""}`;
-      els.settingsEmail.value = user.email || "";
-      els.settingsListId.value = SHARED_LIST_ID;
-      els.settingsStorage.value = "Supabase: items / life_plans";
+      switchScreen("places");
       renderAll();
     }
 
@@ -1084,11 +954,23 @@
 
     function renderPlaces() {
       updatePlaceFilterTabs();
+
+const foodWantCount = state.places.filter((item) => item.category === "食" && !item.visited).length;
+const foodDoneCount = state.places.filter((item) => item.category === "食" && !!item.visited).length;
+const travelWantCount = state.places.filter((item) => item.category === "旅行" && !item.visited).length;
+const travelDoneCount = state.places.filter((item) => item.category === "旅行" && !!item.visited).length;
+
+els.summaryFoodWant.textContent = String(foodWantCount);
+els.summaryFoodDone.textContent = String(foodDoneCount);
+els.summaryTravelWant.textContent = String(travelWantCount);
+els.summaryTravelDone.textContent = String(travelDoneCount);
+
       const rows = getFilteredPlaces();
       if (rows.length === 0) {
         els.placesList.innerHTML = `<div class="empty-state">該当する行きたい場所がありません。</div>`;
         return;
       }
+
       els.placesList.innerHTML = rows.map((item) => `
         <article class="card">
           <div class="pill-row">
@@ -1132,55 +1014,10 @@
       `).join("");
     }
 
-    function renderHome() {
-      const wantCount = state.places.filter((item) => !item.visited).length;
-      const doneCount = state.places.filter((item) => !!item.visited).length;
-      const sharedCount = state.plans.filter((item) => item.owner_type === "shared").length;
-      const activeCount = state.plans.filter((item) => item.status === "active").length;
-      els.summaryWant.textContent = String(wantCount);
-      els.summaryDone.textContent = String(doneCount);
-      els.summaryShared.textContent = String(sharedCount);
-      els.summaryActive.textContent = String(activeCount);
-
-      const latestPlaces = [...state.places].slice(0, 3);
-      const topPlans = [...state.plans]
-        .sort((a, b) => (Number(b.priority) - Number(a.priority)) || String(b.created_at || "").localeCompare(String(a.created_at || "")))
-        .slice(0, 3);
-
-      els.homePlaces.innerHTML = latestPlaces.length ? latestPlaces.map((item) => `
-        <article class="card">
-          <div class="pill-row">
-            <span class="pill">${escapeHtml(item.category || "")}</span>
-            <span class="pill primary">${item.visited ? "行った" : "行きたい"}</span>
-          </div>
-          <h3 class="card-title">${escapeHtml(item.name)}</h3>
-        </article>
-      `).join("") : `<div class="empty-state">まだ行きたい場所がありません。</div>`;
-
-      els.homePlans.innerHTML = topPlans.length ? topPlans.map((item) => `
-        <article class="card">
-          <div class="pill-row">
-            <span class="pill">${escapeHtml(item.age_group || "")}</span>
-            <span class="pill">${escapeHtml(ownerLabel(item.owner_type))}</span>
-            <span class="pill primary">${escapeHtml(statusLabel(item.status))}</span>
-          </div>
-          <h3 class="card-title">${escapeHtml(item.title)}</h3>
-          <p class="card-text">${escapeHtml(item.note || "")}</p>
-        </article>
-      `).join("") : `<div class="empty-state">まだライフプランがありません。</div>`;
-    }
-
-    function renderSettings() {
-      els.settingsItemsCount.textContent = String(state.places.length);
-      els.settingsPlansCount.textContent = String(state.plans.length);
-    }
-
     function renderAll() {
       updateFormTitles();
-      renderHome();
       renderPlaces();
       renderPlans();
-      renderSettings();
     }
 
     async function loadPlaces() {
@@ -1503,13 +1340,14 @@
 
       els.reloadBtn.addEventListener("click", async () => {
         els.accountMenu.classList.add("hidden");
-        await reloadAllData(els.settingsStatus);
+        await reloadAllData(els.placeStatus);
       });
+
       els.logoutBtn.addEventListener("click", async () => {
         els.accountMenu.classList.add("hidden");
         const { error } = await supabase.auth.signOut();
         if (error) {
-          setStatus(els.settingsStatus, `ログアウトに失敗しました: ${error.message}`, "error");
+          setStatus(els.placeStatus, `ログアウトに失敗しました: ${error.message}`, "error");
           return;
         }
         showLoggedOut();
@@ -1525,12 +1363,14 @@
       els.fabModal.addEventListener("click", (e) => {
         if (e.target === els.fabModal) closeFabModal();
       });
+
       els.openPlaceFormBtn.addEventListener("click", () => {
         closeFabModal();
         switchScreen("places");
         window.scrollTo({ top: 0, behavior: "smooth" });
         els.placeNameInput.focus();
       });
+
       els.openPlanFormBtn.addEventListener("click", () => {
         closeFabModal();
         switchScreen("plans");
@@ -1543,6 +1383,7 @@
         resetPlaceForm();
         setStatus(els.placeStatus, "編集をキャンセルしました。");
       });
+
       els.savePlanBtn.addEventListener("click", savePlan);
       els.cancelPlanEditBtn.addEventListener("click", () => {
         resetPlanForm();
@@ -1561,6 +1402,7 @@
           renderPlans();
         });
       });
+
       document.querySelectorAll("[data-owner-filter]").forEach((btn) => {
         btn.addEventListener("click", () => {
           state.planOwnerFilter = btn.dataset.ownerFilter;
@@ -1594,11 +1436,6 @@
         if (e.target === els.deleteModal) closeDeleteModal();
       });
 
-      els.settingsReloadBtn.addEventListener("click", () => reloadAllData(els.settingsStatus));
-      els.settingsGoHomeBtn.addEventListener("click", () => switchScreen("home"));
-      els.settingsGoPlacesBtn.addEventListener("click", () => switchScreen("places"));
-      els.settingsGoPlansBtn.addEventListener("click", () => switchScreen("plans"));
-
       supabase.auth.onAuthStateChange((_event, session) => {
         if (session?.user) {
           handleSession();
@@ -1610,7 +1447,7 @@
 
     async function init() {
       bindEvents();
-      switchScreen("home");
+      switchScreen("places");
       resetPlaceForm();
       resetPlanForm();
       updatePlaceFilterTabs();
